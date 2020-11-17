@@ -1,14 +1,24 @@
 import random
 from words import possible_word
 
-def get_word():
+
+def random_word():
     word = random.choice(possible_word)
     return word.upper()
 
 
-
 def display_hangman(tries):
-    stages = [  # final state: head, torso, both arms, and both legs
+    stages = [  # final state: head, torso, both arms, and both legs, feet
+                """
+                   --------
+                   |      |
+                   |      O
+                   |     \\|/
+                   |      |
+                   |    _/ \\_
+                   -
+                """,
+                # head, torso, both arms, and both legs
                 """
                    --------
                    |      |
@@ -48,13 +58,23 @@ def display_hangman(tries):
                    |
                    -
                 """,
-                # head and torso
+                # head, neck, and torso
                 """
                    --------
                    |      |
                    |      O
                    |      |
                    |      |
+                   |
+                   -
+                """,
+                # head and neck
+                """
+                   --------
+                   |      |
+                   |      O
+                   |      |
+                   |      
                    |
                    -
                 """,
@@ -80,4 +100,51 @@ def display_hangman(tries):
                 """
     ]
     return stages[tries]
+
+
+def main():
+    tries = 8
+    game_word = random_word()
+    player_word = ""
+    for x in range(len(game_word)):
+        player_word += "-"
+
+    while tries >= 0:
+        print(display_hangman(tries))
+        print("\t\t\t\t\t" + player_word)
+
+        print("\nEnter your letter guess below. To solve the word, type 'solve'")
+
+        guess = input()
+        guess = guess.upper()
+        if guess == "SOLVE":
+            print("Enter your word guess below")
+            word_guess = input()
+            if word_guess.upper() == game_word:
+                print("Congratulations, you win!")
+                break
+            else:
+                print("Incorrect solution")
+                continue
+        elif len(guess) != 1:
+            print("Invalid input, make sure you have only entered one letter")
+            continue
+        elif guess in game_word:
+            temp_word = game_word
+            for i in range(game_word.count(guess)):
+                player_word = player_word[:temp_word.index(guess)] + guess + \
+                              player_word[temp_word.index(guess) + 1:]
+
+                temp_word.replace(guess, "", 1)
+        else:
+            tries -= 1
+
+        if player_word == game_word:
+            print("Congratulations, you win!")
+            break
+
+    print("game over")
+
+
+main()
 

@@ -104,6 +104,7 @@ def display_hangman(tries):
 
 def main():
     tries = 8
+    guesses = set()
     game_word = random_word()
     player_word = ""
     for x in range(len(game_word)):
@@ -112,6 +113,10 @@ def main():
     while tries >= 0:
         print(display_hangman(tries))
         print("\t\t\t\t\t" + player_word)
+
+        if len(guesses) != 0:
+            print("\nGuesses: ", end="")
+            print(guesses)
 
         print("\nEnter your letter guess below. To solve the word, type 'solve'")
 
@@ -126,24 +131,26 @@ def main():
             else:
                 print("Incorrect solution")
                 continue
-        elif len(guess) != 1:
-            print("Invalid input, make sure you have only entered one letter")
+        elif len(guess) != 1 or guess in guesses:
+            print("Invalid input")
             continue
         elif guess in game_word:
+            guesses.add(guess)
             temp_word = game_word
             for i in range(game_word.count(guess)):
                 player_word = player_word[:temp_word.index(guess)] + guess + \
                               player_word[temp_word.index(guess) + 1:]
 
-                temp_word.replace(guess, "", 1)
+                temp_word = temp_word.replace(guess,"-", 1)
         else:
+            guesses.add(guess)
             tries -= 1
 
         if player_word == game_word:
             print("Congratulations, you win!")
             break
 
-    print("game over")
+    print("GAME FUCKING OVER")
 
 
 main()

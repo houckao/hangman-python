@@ -150,7 +150,10 @@ def main():
             print("Congratulations, you win!")
             break
 
-    print("GAME FUCKING OVER")
+    print("GAME OVER")
+    print("The word was:")
+    print(game_word)
+
 
 
 main()
